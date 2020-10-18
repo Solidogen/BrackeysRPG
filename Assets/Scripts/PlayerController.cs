@@ -8,14 +8,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LayerMask movementMask = default;
 
+    [SerializeField]
+    private Interactable focusedInteractable = default;
+
     private Camera cam;
-    private PlayerMotor motor;
+    private PlayerMotor playerMotor;
     private float raycastMaxDistance = 100;
 
     void Start()
     {
         cam = Camera.main;
-        motor = GetComponent<PlayerMotor>();
+        playerMotor = GetComponent<PlayerMotor>();
     }
 
     void Update()
@@ -27,8 +30,8 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, raycastMaxDistance, movementMask))
             {
-                motor.MoveToPoint(hit.point);
-                // Stop focusing any objects
+                playerMotor.MoveToPoint(hit.point);
+                RemoveFocus();
             }
         }
         else if (Input.GetMouseButtonDown(1)) // RMB
@@ -38,8 +41,24 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, raycastMaxDistance, movementMask))
             {
-                // Check if we hit an interactable and set it as a focus if so
+                Interactable interactable = hit.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    SetFocus(interactable);
+                }
             }
         }
+    }
+
+    private void SetFocus(Interactable interactable)
+    {
+        focusedInteractable = interactable;
+        playerMotor.FollowTarget(interactable);
+    }
+
+    private void RemoveFocus()
+    {
+        focusedInteractable = null;
+        playerMotor.StopFollowingTarget();
     }
 }
