@@ -2,6 +2,9 @@
 
 public class ItemPickup : Interactable
 {
+    [SerializeField]
+    private Item item = default;
+
     public override void Interact()
     {
         base.Interact();
@@ -10,8 +13,8 @@ public class ItemPickup : Interactable
 
     private void PickUp()
     {
-        Debug.Log("Picking up item");
-        // Add to inventory
+        Debug.Log("Picking up " + item.name);
+        FindObjectOfType<Inventory>().AddItem(item);
         Destroy(gameObject);
     }
 }
