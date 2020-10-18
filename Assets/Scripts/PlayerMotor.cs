@@ -18,10 +18,10 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         // TODO use coroutine instead
-        if (targetTransform != null)
-        {
-            navMeshAgent.SetDestination(targetTransform.position);
-        }
+        targetTransform?.Also(it => {
+            navMeshAgent.SetDestination(it.position);
+            FaceTarget();
+        });
     }
 
     public void MoveToPoint(Vector3 point)
@@ -31,13 +31,24 @@ public class PlayerMotor : MonoBehaviour
 
     public void FollowTarget(Interactable interactable)
     {
-        navMeshAgent.stoppingDistance = interactable.radius * STOPPING_DISTANCE_MULTIPLIER;
+        navMeshAgent.stoppingDistance = interactable.interactionRadius * STOPPING_DISTANCE_MULTIPLIER;
+        navMeshAgent.updateRotation = false;
+
         targetTransform = interactable.transform;
     }
 
     public void StopFollowingTarget()
     {
         navMeshAgent.stoppingDistance = 0f;
+        navMeshAgent.updateRotation = true;
+
         targetTransform = null;
+    }
+
+    private void FaceTarget()
+    {
+        Vector3 direction = (targetTransform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 }

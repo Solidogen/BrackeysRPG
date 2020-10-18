@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // TODO extract those to a function
         if (Input.GetMouseButtonDown(0)) // LMB
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -42,22 +43,27 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, raycastMaxDistance, movementMask))
             {
                 Interactable interactable = hit.collider.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    SetFocus(interactable);
-                }
+                interactable?.Also(it => {
+                    SetFocus(it);
+                });
             }
         }
     }
 
     private void SetFocus(Interactable interactable)
     {
-        focusedInteractable = interactable;
-        playerMotor.FollowTarget(interactable);
+        if (focusedInteractable != interactable)
+        {
+            focusedInteractable?.onDefocused();
+            focusedInteractable = interactable;
+            playerMotor.FollowTarget(interactable);
+        }
+        focusedInteractable.OnFocused(playerTransform: transform);
     }
 
     private void RemoveFocus()
     {
+        focusedInteractable?.onDefocused();
         focusedInteractable = null;
         playerMotor.StopFollowingTarget();
     }
