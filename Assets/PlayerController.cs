@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private LayerMask movementMask;
+    private LayerMask movementMask = default;
 
     private Camera cam;
     private PlayerMotor motor;
@@ -20,8 +20,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // LMB
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) // LMB
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -30,6 +29,16 @@ public class PlayerController : MonoBehaviour
             {
                 motor.MoveToPoint(hit.point);
                 // Stop focusing any objects
+            }
+        }
+        else if (Input.GetMouseButtonDown(1)) // RMB
+        {
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, raycastMaxDistance, movementMask))
+            {
+                // Check if we hit an interactable and set it as a focus if so
             }
         }
     }
