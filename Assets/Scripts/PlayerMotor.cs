@@ -34,7 +34,7 @@ public class PlayerMotor : MonoBehaviour
         navMeshAgent.stoppingDistance = interactable.interactionRadius * STOPPING_DISTANCE_MULTIPLIER;
         navMeshAgent.updateRotation = false;
 
-        targetTransform = interactable.transform;
+        targetTransform = interactable.interactionTransform;
     }
 
     public void StopFollowingTarget()
