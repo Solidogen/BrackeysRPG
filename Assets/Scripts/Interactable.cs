@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
@@ -25,7 +22,8 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public virtual void Interact() {
+    public virtual void Interact()
+    {
         Debug.Log("Interacting with: " + transform.name);
     }
 
@@ -45,6 +43,10 @@ public class Interactable : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        if (interactionTransform == null)
+        {
+            interactionTransform = transform;
+        }
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(interactionTransform.position, interactionRadius);
     }

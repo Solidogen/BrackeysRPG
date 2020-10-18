@@ -18,7 +18,7 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         // TODO use coroutine instead
-        targetTransform?.Also(it => {
+        targetTransform?.Run(it => {
             navMeshAgent.SetDestination(it.position);
             FaceTarget();
         });
