@@ -26,7 +26,9 @@ public class CameraController : MonoBehaviour
     private float yawSpeed = 100f;
 
     private float currentZoom = 10f;
-    private float currentYaw = 0f;
+
+    // TODO put camera behind player, atm I don't know where front is
+    private float currentYaw = 180f;
 
     void Update()
     {
