@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
@@ -23,6 +22,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         // TODO extract those to a function
         if (Input.GetMouseButtonDown(0)) // LMB
         {
@@ -43,7 +47,8 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, raycastMaxDistance, movementMask))
             {
                 Interactable interactable = hit.collider.GetComponent<Interactable>();
-                interactable?.Also(it => {
+                interactable?.Also(it =>
+                {
                     SetFocus(it);
                 });
             }

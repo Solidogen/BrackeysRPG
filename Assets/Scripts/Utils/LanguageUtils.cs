@@ -1,6 +1,6 @@
 using System;
 
-public static class Utils
+public static class LanguageUtils
 {
     public static void Run<T>(this T self, Action<T> block)
     {
