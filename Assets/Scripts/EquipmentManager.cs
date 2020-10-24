@@ -1,29 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EquipmentManager : Singleton<EquipmentManager>
 {
     private Equipment[] currentEquipment;
     private Inventory inventory;
 
+    public delegate void OnEquipmentChanged(Equipment newEquipment, Equipment oldEquipment);
+    public OnEquipmentChanged onEquipmentChanged;
+
     void Start()
     {
         inventory = Inventory.Instance;
         // todo THIS SUCKS, these should be 6 Equipment subclasses instead of array
+        // or Dictionary<EquipmentSlot, Equipment> maybe?
         int equipmentTypesCount = System.Enum.GetNames(typeof(EquipmentType)).Length;
         currentEquipment = new Equipment[equipmentTypesCount];
     }
 
-    public void Equip(Equipment equipment)
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            UnequipAll();
+        }
+    }
+
+    public void Equip(Equipment newEquipment)
     {
         // todo THIS SUCKS, any change in enum will break whole inventory
-        int slotIndex = (int)equipment.type;
+        int slotIndex = (int)newEquipment.type;
 
-        var oldItem = currentEquipment[slotIndex];
-        oldItem?.Run(it => {
+        var oldEquipment = currentEquipment[slotIndex];
+        oldEquipment?.Run(it =>
+        {
             inventory.AddItem(it);
         });
-        currentEquipment[slotIndex] = equipment;
+        currentEquipment[slotIndex] = newEquipment;
+
+        onEquipmentChanged?.Invoke(newEquipment: newEquipment, oldEquipment: oldEquipment);
+    }
+
+    public void Unequip(int slotIndex)
+    {
+        // todo THIS SUCKS, I should be able to unequip item by it's type
+        var oldEquipment = currentEquipment[slotIndex];
+        oldEquipment?.Run(it =>
+        {
+            inventory.AddItem(it);
+            currentEquipment[slotIndex] = null;
+
+            onEquipmentChanged?.Invoke(newEquipment: null, oldEquipment: oldEquipment);
+        });
+    }
+
+    public void UnequipAll()
+    {
+        // todo SUCKS as everything in this class
+        for (int i = 0; i < currentEquipment.Length; i++)
+        {
+            Unequip(i);
+        }
     }
 }
