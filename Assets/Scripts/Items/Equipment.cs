@@ -9,7 +9,9 @@ public class Equipment : Item
     [SerializeField]
     private int damageModifier = default;
 
+    public SkinnedMeshRenderer mesh = default;
     public EquipmentType type = default;
+    public EquipmentMeshRegion[] coveredMeshRegions = default;
 
     public override void Use()
     {

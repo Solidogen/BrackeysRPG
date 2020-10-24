@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f404c17422a6665686190ac38daa787, type: 3}
-  m_Name: Helmet of Fire
+  m_Name: Platebody
   m_EditorClassIdentifier: 
-  name: Helmet of Fire
-  icon: {fileID: 21300000, guid: 96d3f9d9dd3847264a7250f67a781619, type: 3}
+  name: Platebody
+  icon: {fileID: 21300000, guid: ee2d60662d4d497039daa9ff80e4edc0, type: 3}
   isDefaultItem: 0
-  armorModifier: 2
-  damageModifier: 1
-  equipmentType: 0
+  armorModifier: 0
+  damageModifier: 3
+  mesh: {fileID: 5015875817500671846, guid: 0e620992eb88506f8bb5be7da5c324d2, type: 3}
+  type: 1
+  coveredMeshRegions: 0100000002000000
